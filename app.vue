@@ -1,6 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+useHead({
+  title: "CapyCode",
+});
+</script>
 
-<template>Teste</template>
+<template>
+  <NuxtLayout> </NuxtLayout>
+</template>
 
 <style>
 :root {
@@ -207,15 +213,24 @@
   margin: 0;
 }
 
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   height: 100%;
 }
 
 body {
+  font-family: "Ubuntu", sans-serif;
   /* In case this causes issue, change for line-height: 1.5 */
   line-height: calc(1em + 0.5rem);
   -webkit-font-smoothing: antialiased;
+}
+
+div#__nuxt {
+  height: 100%;
 }
 
 img,
@@ -240,13 +255,48 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+li {
   overflow-wrap: break-word;
+  color: var(--gray-7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Utilities */
-.flow > * + * {
+.flow-block > * + * {
   margin-top: var(--flow-space, 1em);
+}
+
+.flow-inline > * + * {
+  margin-left: var(--flow-space, 1em);
+}
+
+.sr-only {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  white-space: nowrap !important;
 }
 
 /* CSS Authoring Guidelines
