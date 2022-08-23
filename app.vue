@@ -5,7 +5,7 @@ useHead({
 </script>
 
 <template>
-  <NuxtLayout> </NuxtLayout>
+  <NuxtLayout></NuxtLayout>
 </template>
 
 <style>
