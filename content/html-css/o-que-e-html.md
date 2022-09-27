@@ -1,3 +1,9 @@
+---
+id: cl8j6qgxb0087lotaj6m2qrd0
+project: "html-inicial-capy-code"
+---
+
+
 # O que é HTML?
 
 HTML ou Hyper-Text Markup Language ("Linguagem de Marcação de Hipertexto" em português) é uma linguagem de marcação que define a estrutura de uma página web.
@@ -26,5 +32,3 @@ Como você pode ver, um documento HTML é composto de "caixas" de `<abertura>` e
 - `<body>` envolve todo o, de fato, conteúdo da sua página.
 - `<h1>` os elementos de `<h1>` a `<h6>` representam um título. Sua ordem e uso é importante por vários motivos que vamos nos aprofundar em seguida.
 - `<p>` representa um parágrafo de texto.
-
-:challenge-status

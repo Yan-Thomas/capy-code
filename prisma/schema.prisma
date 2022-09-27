@@ -6,3 +6,97 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                    String              @id @default(cuid())
+  name                  String              @db.VarChar(200)
+  email                 String              @unique @db.VarChar(200)
+  password              String              @db.VarChar(64)
+  description           String?             @db.Text
+  authToken             String?             @db.VarChar(64)
+  authDiscord           String?             @db.VarChar(64)
+  authGithub            String?             @db.VarChar(64)
+  isEmailVerified       Boolean?            @default(false)
+  emailConfirmationCode String?             @db.VarChar(8)
+  passwordRecoveryToken String?             @db.VarChar(64)
+  socials               Social[]
+  articles              ArticleProgress[]
+  challenges            ChallengeProgress[]
+  roadmaps              RoadmapProgress[]
+}
+
+model Social {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Course {
+  id          String           @id @default(cuid())
+  description String           @db.Text
+  articles    Article[]
+  roadmaps    RoadmapCourses[]
+}
+
+model Article {
+  id              String            @id @default(cuid())
+  name            String            @db.VarChar(100)
+  order           Int               @default(autoincrement())
+  course          Course            @relation(fields: [courseId], references: [id])
+  courseId        String
+  articleProgress ArticleProgress[]
+}
+
+model ArticleProgress {
+  article        Article  @relation(fields: [articleId], references: [id])
+  isFinished     Boolean  @default(false)
+  conclusionDate DateTime @default(now()) @db.Date
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  articleId      String
+
+  @@id([userId, articleId])
+}
+
+model Challenge {
+  id                String              @id @default(cuid())
+  name              String              @db.VarChar(200)
+  challengeProgress ChallengeProgress[]
+}
+
+model ChallengeProgress {
+  isFinished  Boolean   @default(false)
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  challengeId String
+
+  @@id([userId, challengeId])
+}
+
+model Roadmap {
+  id              String            @id @default(cuid())
+  name            String            @db.VarChar(200)
+  description     String            @db.Text
+  courses         RoadmapCourses[]
+  roadmapProgress RoadmapProgress[]
+}
+
+model RoadmapCourses {
+  course    Course  @relation(fields: [courseId], references: [id])
+  courseId  String
+  roadmap   Roadmap @relation(fields: [roadmapId], references: [id])
+  roadmapId String
+
+  @@id([courseId, roadmapId])
+}
+
+model RoadmapProgress {
+  isSelected Boolean @default(false)
+  user       User    @relation(fields: [userId], references: [id])
+  userId     String
+  roadmap    Roadmap @relation(fields: [roadmapId], references: [id])
+  roadmapId  String
+
+  @@id([userId, roadmapId])
+}

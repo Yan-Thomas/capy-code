@@ -5,7 +5,7 @@ useHead({
 </script>
 
 <template>
-  <NuxtLayout></NuxtLayout>
+  <NuxtPage />
 </template>
 
 <style>
@@ -259,6 +259,21 @@ h6,
 li {
   overflow-wrap: break-word;
   color: var(--gray-7);
+}
+
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+pre {
+  background-color: var(--gray-1);
+  padding: var(--space-2xs);
 }
 
 @media (prefers-reduced-motion: reduce) {

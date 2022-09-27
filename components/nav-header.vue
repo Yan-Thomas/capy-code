@@ -17,13 +17,13 @@ function changeTheme() {
         </li>
         <div class="flow-inline center">
           <li>
-            <a href="/cursos">Aprenda</a>
+            <NuxtLink href="/cursos">Aprenda</NuxtLink>
           </li>
           <li>
-            <a href="/contribuidores">Contribuidores</a>
+            <NuxtLink href="/contribuidores">Contribuidores</NuxtLink>
           </li>
           <li>
-            <a href="/">Sobre</a>
+            <NuxtLink href="/sobre">Sobre</NuxtLink>
           </li>
         </div>
         <div class="flow-inline right">
