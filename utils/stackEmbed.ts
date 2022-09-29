@@ -1,9 +1,8 @@
-import sdk from "@stackblitz/sdk";
+import sdk, { EmbedOptions } from "@stackblitz/sdk";
 
-const options = {
+const options: EmbedOptions = {
   height: "100%",
-  width: "60%",
-  hideExplorer: true,
+  width: "54%",
   hideNavigation: true,
   hideDevTools: true,
 };
@@ -12,5 +11,5 @@ export default async function embedStackBlitz(
   elementId: string,
   projectId: string
 ) {
-  return sdk.embedProjectId(elementId, projectId, options);
+  return await sdk.embedProjectId(elementId, projectId, options);
 }

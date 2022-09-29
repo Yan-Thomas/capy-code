@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Article } from ".prisma/client";
+import { VM } from "@stackblitz/sdk";
 import embedStackBlitz from "~~/utils/stackEmbed";
 
 const route = useRoute();
@@ -15,6 +16,7 @@ const { data: articleMarkdown } = await useAsyncData("article-data", () =>
 );
 
 onMounted(() => {
+  if (!articleMarkdown.value?.project) return;
   embedStackBlitz("codeEmbed", articleMarkdown.value?.project);
 });
 </script>
@@ -37,7 +39,9 @@ onMounted(() => {
         </article>
         <article-buttons :article-meta="articleMeta!" />
       </section>
-      <div id="codeEmbed"></div>
+      <div id="codeEmbed">
+        <p>Sem editor interativo nessa aula, quem sabe na próxima!</p>
+      </div>
     </main>
   </div>
 </template>
@@ -53,6 +57,12 @@ section {
   padding-inline: var(--space-s);
   padding-top: var(--space-xl);
   overflow-y: scroll;
-  width: 50%;
+  width: 46%;
+}
+
+div#codeEmbed {
+  width: 54%;
+  display: grid;
+  place-items: center;
 }
 </style>
