@@ -1,36 +1,6 @@
-<script setup lang="ts">
-import sdk, { VM } from "@stackblitz/sdk";
-const fsDiff = {
-  create: {
-    "index.html": `
-<!DOCTYPE html>
-<html>
-    <head>
-    <!-- tags meta irão aqui! -->
-    </head>
-    <body>
-        <h1>Um título no HTML
-    </body>
-</html>
-`,
-  },
-  destroy: [],
-};
-
-const vm = ref<VM>();
-
-function applyCodeChanges() {
-  if (!vm) return;
-  vm.value?.applyFsDiff(fsDiff);
-}
-
-onMounted(async () => {
-  const iframe = document.getElementById("codeEmbed") as HTMLIFrameElement;
-  vm.value = await sdk.connect(iframe);
-});
-</script>
+<script setup lang="ts"></script>
 <template>
-  <button @click="applyCodeChanges()">Me mostre!</button>
+  <button>Me mostre!</button>
 </template>
 <style scoped>
 button {

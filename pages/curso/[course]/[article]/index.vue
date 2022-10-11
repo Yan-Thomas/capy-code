@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Article } from ".prisma/client";
-import embedStackBlitz from "~~/utils/stackEmbed";
 
 const route = useRoute();
 
@@ -13,11 +12,6 @@ const { data: allArticles } = await useFetch<Article[]>(
 const { data: articleMarkdown } = await useAsyncData("article-data", () =>
   queryContent().where({ id: route.params.article }).findOne()
 );
-
-onMounted(() => {
-  if (!articleMarkdown.value?.project) return;
-  embedStackBlitz("codeEmbed", articleMarkdown.value?.project);
-});
 </script>
 
 <template>
@@ -35,12 +29,17 @@ onMounted(() => {
     </article>
     <article-nav class="nav" :article-meta="articleMeta!" />
   </section>
-  <div id="codeEmbed">
-    <p>Sem editor interativo nessa aula, quem sabe na próxima!</p>
+  <div class="sandbox-iframe">
+    <interactive-sandbox />
   </div>
 </template>
 
 <style>
+html,
+body {
+  overflow-y: hidden;
+}
+
 main {
   height: calc(100% - 79px);
   display: flex;
@@ -54,9 +53,11 @@ section {
   width: 46%;
 }
 
-div#codeEmbed {
+.sandbox-iframe {
   width: 54%;
-  display: grid;
-  place-items: center;
+}
+
+.editor {
+  height: calc(50% - 79px);
 }
 </style>
