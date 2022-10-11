@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Article } from ".prisma/client";
-import { VM } from "@stackblitz/sdk";
 import embedStackBlitz from "~~/utils/stackEmbed";
 
 const route = useRoute();
@@ -22,35 +21,30 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <nav-header />
-    <main>
-      <section>
-        <nav-article
-          :current-article="articleMeta!.article"
-          :all-articles="allArticles!"
-        />
-        <article>
-          <ContentRenderer class="flow-block" :value="articleMarkdown!">
-            <template #empty>
-              <p>Erro ao carregar conteúdo.</p>
-            </template>
-          </ContentRenderer>
-        </article>
-        <article-buttons :article-meta="articleMeta!" />
-      </section>
-      <div id="codeEmbed">
-        <p>Sem editor interativo nessa aula, quem sabe na próxima!</p>
-      </div>
-    </main>
+  <section>
+    <article-header
+      :current-article="articleMeta!.article"
+      :all-articles="allArticles!"
+    />
+    <article>
+      <ContentRenderer class="flow-block" :value="articleMarkdown!">
+        <template #empty>
+          <p>Erro ao carregar conteúdo.</p>
+        </template>
+      </ContentRenderer>
+    </article>
+    <article-nav class="nav" :article-meta="articleMeta!" />
+  </section>
+  <div id="codeEmbed">
+    <p>Sem editor interativo nessa aula, quem sabe na próxima!</p>
   </div>
 </template>
 
-<style scoped>
+<style>
 main {
+  height: calc(100% - 79px);
   display: flex;
   flex-direction: row;
-  height: calc(100vh - 79px);
 }
 
 section {

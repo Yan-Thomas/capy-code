@@ -5,7 +5,9 @@ useHead({
 </script>
 
 <template>
-  <NuxtPage />
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <style>
@@ -269,6 +271,51 @@ h5 a,
 h6 a {
   text-decoration: none;
   color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: var(--step-2);
+}
+
+h2 {
+  font-size: var(--step-1);
+}
+
+h3 {
+  font-size: var(--step-0);
+}
+
+h4 {
+  font-size: var(--step--1);
+}
+
+h5 {
+  font-size: var(--step--2);
+}
+
+h6 {
+  font-size: var(--step--2);
+}
+
+p {
+  --flow-space: var(--space-s);
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  --flow-space: var(--space-m);
 }
 
 pre {
