@@ -64,7 +64,7 @@ if (sandboxData.value && article) {
     </section>
     <div class="sandbox-iframe">
       <interactive-sandbox
-        v-if="codeData!.files"
+        v-if="codeData"
         :files="codeData!.files"
         :entry-file="codeData!.entryFile"
       />
@@ -94,6 +94,11 @@ section {
 
 .sandbox-iframe {
   width: 54%;
+}
+
+.sandbox-iframe:has(p) {
+  display: grid;
+  place-items: center;
 }
 
 .editor {

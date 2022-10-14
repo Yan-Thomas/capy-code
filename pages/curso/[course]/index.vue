@@ -15,3 +15,5 @@ if (!course || !firstArticle) {
 
 await navigateTo(`/curso/${course?.id}/${firstArticle?.id}`);
 </script>
+
+<template>Redirecionando para página do curso...</template>

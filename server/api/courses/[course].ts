@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (!course) {
     return sendError(
       event,
-      createError({ statusCode: 404, statusMessage: "Article not found" })
+      createError({ statusCode: 404, statusMessage: "Course not found" })
     );
   }
 

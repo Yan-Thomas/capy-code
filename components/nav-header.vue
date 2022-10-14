@@ -60,32 +60,7 @@ function changeTheme() {
             </a>
           </li>
           <li>
-            <button @click="changeTheme">
-              <svg
-                v-if="$colorMode.value === 'light'"
-                width="24"
-                height="24"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill="inherit"
-                  fill-rule="evenodd"
-                  d="M10 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm4 8a4 4 0 1 1-8 0a4 4 0 0 1 8 0Zm-.464 4.95l.707.707a1 1 0 0 0 1.414-1.414l-.707-.707a1 1 0 0 0-1.414 1.414Zm2.12-10.607a1 1 0 0 1 0 1.414l-.706.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0ZM17 11a1 1 0 1 0 0-2h-1a1 1 0 1 0 0 2h1Zm-7 4a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1ZM5.05 6.464A1 1 0 1 0 6.465 5.05l-.708-.707a1 1 0 0 0-1.414 1.414l.707.707Zm1.414 8.486l-.707.707a1 1 0 0 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 1.414ZM4 11a1 1 0 1 0 0-2H3a1 1 0 0 0 0 2h1Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <svg
-                v-if="$colorMode.value === 'dark'"
-                width="24"
-                height="24"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill="inherit"
-                  d="M17.293 13.293A8 8 0 0 1 6.707 2.707a8.001 8.001 0 1 0 10.586 10.586Z"
-                />
-              </svg>
-            </button>
+            <main-button type="primary">Entrar</main-button>
           </li>
         </div>
       </ul>
@@ -121,6 +96,7 @@ ul .center {
 
 ul .right {
   display: flex;
+  align-items: center;
   flex-direction: row;
   justify-content: right;
 }
@@ -136,7 +112,7 @@ svg {
   fill: var(--gray-8);
 }
 
-button {
+.theme-selector {
   cursor: pointer;
   margin: 0;
   padding: 0;
@@ -144,7 +120,7 @@ button {
   border: none;
 }
 
-button:hover svg {
+.theme-selector:hover svg {
   fill: var(--gray-9);
 }
 
