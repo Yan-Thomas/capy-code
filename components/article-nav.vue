@@ -2,10 +2,10 @@
 import { Article } from ".prisma/client";
 
 const props = defineProps<{
-  articleMeta: {
-    article: Article;
-    previous: Article | null;
-    next: Article | null;
+  articleContext: {
+    article: Article | undefined;
+    previous: Article | undefined;
+    next: Article | undefined;
   };
 }>();
 </script>
@@ -13,8 +13,8 @@ const props = defineProps<{
   <div class="article-buttons">
     <div>
       <a
-        v-if="props.articleMeta.previous"
-        :href="props.articleMeta.previous.id"
+        v-if="props.articleContext.previous"
+        :href="props.articleContext.previous.id"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,7 @@ const props = defineProps<{
     </div>
     <div>
       <div>
-        <a v-if="props.articleMeta.next" :href="props.articleMeta.next.id"
+        <a v-if="props.articleContext.next" :href="props.articleContext.next.id"
           >Próximo
           <svg
             xmlns="http://www.w3.org/2000/svg"

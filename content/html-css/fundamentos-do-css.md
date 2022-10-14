@@ -1,13 +1,12 @@
 ---
 id: cl8m9zhv700713otadzf94gug
-project: "css-primeiros-passos"
 ---
 
 # Fundamentos do CSS
 
 CSS é o acrônimo de Cascading Style Sheets (em português, "Folhas de Estilo em Cascata"), sendo a tecnologia responsável pela estilização de páginas web.
 
-Você pode tanto adicionar a estilização do seu site diretamente no HTML, seja através do atributo `style` ou como conteúdo do elemento `<style></style>`, ou utilizar-se de um link externo para um arquivo `.css`, como mostramos no código de exemplo ao lado.
+Você pode tanto adicionar a estilização do seu site diretamente no HTML, seja através do atributo `style` ou como conteúdo do elemento `<style></style>`{lang="html"}, ou utilizar-se de um link externo para um arquivo `.css`, como mostramos no código de exemplo ao lado.
 
 Para modificar algo no CSS, você precisa criar uma regra, ou seja, um conjunto de seletor, propriedades e valores, uma regra no CSS se parecerá com isso:
 
@@ -24,9 +23,9 @@ Primeiramente, você precisa selecionar o que precisa ser modificado numa págin
 
 Alguns seletores notáveis:
 
-- `*` seleciona todos os elementos da página
-- `.nome-da-minha-classe` seleciona uma classe específica
-- `#nome-do-meu-id` seleciona um ID específico
+- `*`{lang="css"} seleciona todos os elementos da página
+- `.nome-da-minha-classe`{lang="css"} seleciona uma classe específica
+- `#nome-do-meu-id`{lang="css"} seleciona um ID específico
 
 ## Propriedades e Valores
 
@@ -34,9 +33,9 @@ Dentro do bloco da regra, você define as propriedades, que podem variar depende
 
 Algumas propriedades notáveis são:
 
-- `background-color` modifica a cor de fundo de um elemento
-- `padding` adiciona um preenchimento entre o conteúdo de um elemento e sua borda
-- `margin` adiciona um espaçamento entre um elemento e outros ao redor
-- `border` define diversas características da borda de um elemento
+- `background-color`{lang="css"} modifica a cor de fundo de um elemento
+- `padding`{lang="css"} adiciona um preenchimento entre o conteúdo de um elemento e sua borda
+- `margin`{lang="css"} adiciona um espaçamento entre um elemento e outros ao redor
+- `border`{lang="css"} define diversas características da borda de um elemento
 
 No código de exemplo ao lado, existe o arquivo `styles.css`, onde colocamos quantas regras desejarmos aplicar nesta página.

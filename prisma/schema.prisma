@@ -32,7 +32,8 @@ model Social {
 }
 
 model Course {
-  id          String           @id @default(cuid())
+  id          String           @id @db.VarChar(200)
+  name        String           @db.VarChar(200)
   description String           @db.Text
   articles    Article[]
   roadmaps    RoadmapCourses[]

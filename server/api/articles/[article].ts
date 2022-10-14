@@ -5,29 +5,18 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const articleId = event.context.params.article;
 
-  const article = await prisma.article.findUniqueOrThrow({
+  const article = await prisma.article.findUnique({
     where: {
       id: articleId,
     },
   });
 
-  const previousArticle = await prisma.article.findFirst({
-    where: {
-      courseId: article?.courseId,
-      order: article?.order - 1,
-    },
-  });
+  if (!article) {
+    return sendError(
+      event,
+      createError({ statusCode: 404, statusMessage: "Article not found" })
+    );
+  }
 
-  const nextArticle = await prisma.article.findFirst({
-    where: {
-      courseId: article?.courseId,
-      order: article?.order + 1,
-    },
-  });
-
-  return {
-    article,
-    previous: previousArticle,
-    next: nextArticle,
-  };
+  return article;
 });

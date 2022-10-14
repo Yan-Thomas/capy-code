@@ -25,7 +25,8 @@ CREATE TABLE "Social" (
 
 -- CreateTable
 CREATE TABLE "Course" (
-    "id" TEXT NOT NULL,
+    "id" VARCHAR(200) NOT NULL,
+    "name" VARCHAR(200) NOT NULL,
     "description" TEXT NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")

@@ -2,8 +2,9 @@
 import { Article } from ".prisma/client";
 
 const props = defineProps<{
+  courseName: string;
   currentArticle: Article;
-  allArticles: Article[];
+  articles: Article[];
 }>();
 
 const isOpen = ref(false);
@@ -31,15 +32,31 @@ function toggleNav() {
           />
         </svg>
       </button>
-      <p>{{ props.currentArticle.name }}</p>
+      <p>
+        {{ props.courseName }}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          height="20"
+          width="20"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span class="article">{{ props.currentArticle.name }}</span>
+      </p>
     </div>
-    <span
-      >{{ props.currentArticle.order }} / {{ props.allArticles.length }}</span
+    <span class="count"
+      >{{ props.currentArticle.order }} / {{ props.articles.length }}</span
     >
   </div>
   <nav :class="{ open: isOpen }">
     <ul>
-      <li v-for="atc in props.allArticles" :key="atc.id">
+      <li v-for="atc in props.articles" :key="atc.id">
         <a :href="atc.id" :class="{ active: atc.id == currentArticle.id }">{{
           atc.order + ". " + atc.name
         }}</a>
@@ -69,12 +86,18 @@ svg {
 }
 
 p {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   font-weight: bold;
 }
 
-span {
-  font-weight: medium;
+.count {
   color: var(--gray-6);
+}
+
+.article {
+  font-weight: normal;
 }
 
 nav {

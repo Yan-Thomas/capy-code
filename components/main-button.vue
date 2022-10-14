@@ -1,6 +1,7 @@
-<script setup lang="ts"></script>
 <template>
-  <button>Me mostre!</button>
+  <button>
+    <slot />
+  </button>
 </template>
 <style scoped>
 button {

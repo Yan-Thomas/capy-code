@@ -1,12 +1,10 @@
 <template>
   <nav-header />
-  <main>
-    <slot />
-  </main>
+  <slot />
 </template>
 
 <style scoped>
-main {
+:slotted(main) {
   min-height: calc(100% - 79px);
 }
 </style>
