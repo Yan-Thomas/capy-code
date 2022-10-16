@@ -11,9 +11,15 @@ const props = defineProps<{
   entryFile: string;
 }>();
 
-const entryFileCode = toRef(props.files, props.entryFile);
+const activeTab = ref(props.entryFile);
 
-function getEntryExtension(filename: string) {
+function changeTab(tab: string) {
+  activeTab.value = tab;
+  extensions.value = [getFileExtension(activeTab.value)()];
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+function getFileExtension(filename: string): Function {
   const extension = filename.substring(filename.indexOf(".") + 1);
 
   if (extension === "html") return html;
@@ -22,7 +28,7 @@ function getEntryExtension(filename: string) {
   else throw new Error("Invalid extension");
 }
 
-const extensions = [getEntryExtension(props.entryFile)()];
+const extensions = ref([getFileExtension(activeTab.value)()]);
 
 let client: SandpackClient;
 
@@ -56,13 +62,28 @@ watch(props.files, () => {
 
 <template>
   <div class="editor">
-    <Codemirror
-      v-model="entryFileCode.code"
-      :indent-with-tab="true"
-      :tab-size="4"
-      :extensions="extensions"
-      :style="{ height: '100%' }"
-    />
+    <div class="tabs-container">
+      <button
+        v-for="(value, name) in props.files"
+        :key="name"
+        :class="{ active: String(name) === activeTab }"
+        class="tab-button"
+        @click="changeTab(String(name))"
+      >
+        {{ name }}
+      </button>
+    </div>
+    <template v-for="(value, name) in props.files" :key="name">
+      <Codemirror
+        v-if="String(name) === activeTab"
+        v-model="toRef(props.files, name).value.code"
+        :indent-with-tab="true"
+        :tab-size="2"
+        :extensions="extensions"
+        :style="{ height: 'calc(100% - 40px)', outline: '0 !important' }"
+        class="code"
+      />
+    </template>
   </div>
   <div class="divider">
     Resultado
@@ -112,5 +133,20 @@ button:hover {
   width: 20px;
   height: 20px;
   fill: var(--gray-8);
+}
+
+.tabs-container {
+  border-bottom: 1px solid var(--gray-4);
+  z-index: 10;
+}
+
+.tab-button {
+  padding: var(--space-3xs);
+}
+
+.tab-button.active {
+  color: var(--orange-6);
+  border-bottom: 3px solid var(--orange-5);
+  cursor: text;
 }
 </style>

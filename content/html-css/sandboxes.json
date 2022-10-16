@@ -3,7 +3,7 @@
         "entryFile": "index.html",
         "files": {
          "index.html": {
-            "code": "<!DOCTYPE html>\n<html>\n<body>\n<p>Exemplo</p>\n</body>\n</html>"
+            "code": "<!DOCTYPE html>\n<html>\n  <body>\n    <p>Exemplo</p>\n  </body>\n</html>"
          }
         }
     },
@@ -11,10 +11,10 @@
       "entryFile": "index.css",
       "files": {
         "index.css": {
-          "code": "button {\n background-color: red; \n}"
+          "code": "button {\n  background-color: red;\n}"
         },
         "index.html": {
-          "code": "<!DOCTYPE html>\n<html>\n<body>\n<button>Teste</button>\n</body>\n</html>"
+          "code": "<!DOCTYPE html>\n<html>\n  <body>\n    <button>Teste</button>\n  </body>\n</html>"
         }
       }
     }
