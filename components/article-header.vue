@@ -56,10 +56,12 @@ function toggleNav() {
   </div>
   <nav :class="{ open: isOpen }">
     <ul>
-      <li v-for="atc in props.articles" :key="atc.id">
-        <a :href="atc.id" :class="{ active: atc.id == currentArticle.id }">{{
-          atc.order + ". " + atc.name
-        }}</a>
+      <li
+        v-for="atc in props.articles"
+        :key="atc.id"
+        :class="{ active: atc.id == currentArticle.id }"
+      >
+        <a :href="atc.id">{{ atc.order + ". " + atc.name }}</a>
       </li>
     </ul>
   </nav>
@@ -127,15 +129,16 @@ li {
   border-bottom: 0.5px solid var(--gray-4);
 }
 
-li:has(a.active) {
-  background-color: var(--gray-2);
-}
-
 li a {
   text-decoration: none;
   color: inherit;
 }
-li a.active {
+
+li.active {
+  background-color: var(--gray-2);
+}
+
+li.active a {
   font-weight: bold;
 }
 

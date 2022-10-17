@@ -23,7 +23,7 @@ const context = {
   article,
   /* eslint-disable */
   previous: articles![index! - 1],
-  next: articles![index! + 1],
+  next: articles![index! + 1]
   /* eslint-enable */
 };
 
@@ -62,7 +62,7 @@ if (sandboxData.value && article) {
       </article>
       <article-nav class="nav" :article-context="context" />
     </section>
-    <div class="sandbox-iframe">
+    <div :class="{ inactive: !codeData }" class="sandbox-iframe">
       <interactive-sandbox
         v-if="codeData"
         :files="codeData!.files"
@@ -96,7 +96,7 @@ section {
   width: 54%;
 }
 
-.sandbox-iframe:has(p) {
+.sandbox-iframe.inactive {
   display: grid;
   place-items: center;
 }
