@@ -15,7 +15,7 @@
         </a>
       </div>
     </div>
-    <div class="hero"><img src="/public/hero-image.svg" alt="" /></div>
+    <div class="hero"><img src="/hero-image.svg" alt="" /></div>
   </main>
 </template>
 
