@@ -3,10 +3,10 @@
     <nav>
       <ul>
         <li>
-          <a href="/">
+          <NuxtLink to="/">
             <img src="/logo.svg" alt="" />
             <span class="sr-only">Tela inicial</span>
-          </a>
+          </NuxtLink>
         </li>
         <div class="flow-inline center">
           <li>

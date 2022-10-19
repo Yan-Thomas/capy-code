@@ -61,7 +61,7 @@ function toggleNav() {
         :key="atc.id"
         :class="{ active: atc.id == currentArticle.id }"
       >
-        <a :href="atc.id">{{ atc.order + ". " + atc.name }}</a>
+        <NuxtLink :to="atc.id">{{ atc.order + ". " + atc.name }}</NuxtLink>
       </li>
     </ul>
   </nav>

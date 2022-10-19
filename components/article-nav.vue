@@ -12,9 +12,9 @@ const props = defineProps<{
 <template>
   <div class="article-buttons">
     <div>
-      <a
+      <NuxtLink
         v-if="props.articleContext.previous"
-        :href="props.articleContext.previous.id"
+        :to="props.articleContext.previous.id"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -30,11 +30,13 @@ const props = defineProps<{
           />
         </svg>
         Anterior
-      </a>
+      </NuxtLink>
     </div>
     <div>
       <div>
-        <a v-if="props.articleContext.next" :href="props.articleContext.next.id"
+        <NuxtLink
+          v-if="props.articleContext.next"
+          :to="props.articleContext.next.id"
           >Próximo
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +51,7 @@ const props = defineProps<{
               clip-rule="evenodd"
             />
           </svg>
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </div>

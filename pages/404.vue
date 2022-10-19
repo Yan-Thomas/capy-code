@@ -1,3 +1,9 @@
+<script setup lang="ts">
+useHead({
+  title: "Erro 404",
+});
+</script>
+
 <template>
   <main>
     <div class="content flow-block">

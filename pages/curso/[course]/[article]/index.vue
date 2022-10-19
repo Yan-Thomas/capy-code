@@ -13,6 +13,10 @@ const article = articles?.find(
   (article) => article.id === route.params.article
 );
 
+useHead({
+  title: article?.name,
+});
+
 if (!course || !article) {
   await navigateTo("/404", { redirectCode: 404 });
 }
@@ -27,8 +31,9 @@ const context = {
   /* eslint-enable */
 };
 
-const { data: content } = await useAsyncData("article-content", () =>
-  queryContent().where({ id: route.params.article }).findOne()
+const { data: content } = await useAsyncData(
+  `article-content-${route.params.article}`,
+  () => queryContent().where({ id: route.params.article }).findOne()
 );
 
 const path = content?.value?.__path;

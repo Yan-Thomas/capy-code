@@ -21,10 +21,11 @@
 
 <style scoped>
 main {
-  max-height: calc(100% - 79px);
+  min-height: calc(100% - 79px);
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   padding-inline: var(--space-s);
 }
 

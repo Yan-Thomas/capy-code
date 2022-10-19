@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { data: articles } = await useFetch(`/api/articles`);
 
+useHead({
+  title: "Artigos",
+});
+
 const search = ref("");
 
 const filteredArticles = computed(() => {
@@ -18,17 +22,17 @@ const filteredArticles = computed(() => {
       <h1>Artigos</h1>
       <search-content v-model="search" placeholder="Pesquisar por artigos..." />
     </template>
-    <a
+    <NuxtLink
       v-for="article in filteredArticles"
       :key="article.id"
-      :href="'/curso/' + article.courseId + '/' + article.id"
+      :to="'/curso/' + article.courseId + '/' + article.id"
     >
       <Card
         :name="article.name"
         :description="article.description"
         :image-url="article.imageUrl"
       />
-    </a>
+    </NuxtLink>
   </NuxtLayout>
 </template>
 

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { data: roadmaps } = await useFetch(`/api/roadmaps`);
 
+useHead({
+  title: "Trilhas",
+});
+
 const search = ref("");
 
 const filteredRoadmaps = computed(() => {

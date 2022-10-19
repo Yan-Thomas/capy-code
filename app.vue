@@ -361,28 +361,4 @@ pre {
   width: 1px !important;
   white-space: nowrap !important;
 }
-
-/* CSS Authoring Guidelines
-
-Media Queries - rem
-
-Margins - rem/em - Use em for heading font-size based margin scaling:
-
-h1 {
-  font-size: 3rem;
-}
-h2 {
-  font-size: 2rem;
-}
-h3 {
-  font-size: 1.5rem;
-}
-h1, h2, h3 {
-  margin-top: 2em;
-  margin-bottom: 0.5em;
-}
-
-Widths/Heights - Prefer to use max-(height/width) and min-(height/width), rem units
-
-*/
 </style>

@@ -37,20 +37,22 @@ function refreshClient() {
 }
 
 onMounted(() => {
-  client = new SandpackClient(
-    "#codeEmbed",
-    {
-      files: props.files,
-      entry: props.entryFile,
-      dependencies: {},
-    },
-    {
-      width: "100%",
-      height: "50%",
-      showOpenInCodeSandbox: false,
-      showLoadingScreen: false,
-    }
-  );
+  setTimeout(() => {
+    client = new SandpackClient(
+      "#codeEmbed",
+      {
+        files: props.files,
+        entry: props.entryFile,
+        dependencies: {},
+      },
+      {
+        width: "100%",
+        height: "50%",
+        showOpenInCodeSandbox: false,
+        showLoadingScreen: false,
+      }
+    );
+  }, 200);
 });
 
 watch(props.files, () => {
