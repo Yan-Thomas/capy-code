@@ -7,12 +7,12 @@
         navegador, de forma 100% gratuita.
       </p>
       <div class="buttons flow-inline">
-        <a href="/cursos">
+        <NuxtLink to="/cursos">
           <main-button type="primary" :arrow="true">Ver cursos</main-button>
-        </a>
-        <a href="/sobre">
+        </NuxtLink>
+        <NuxtLink to="/sobre">
           <main-button type="secondary">Saiba mais</main-button>
-        </a>
+        </NuxtLink>
       </div>
     </div>
     <div class="hero"><img src="/hero-image.svg" alt="" /></div>
