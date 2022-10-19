@@ -5,7 +5,15 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const query = useQuery(event);
 
-  if (!query.courseId) return null;
+  if (!query.courseId) {
+    const allArticles = await prisma.article.findMany({
+      orderBy: {
+        creationDate: "desc",
+      },
+    });
+
+    return allArticles;
+  }
 
   const courseArticles = await prisma.article.findMany({
     where: {

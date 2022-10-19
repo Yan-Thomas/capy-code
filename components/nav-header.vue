@@ -1,10 +1,3 @@
-<script setup lang="ts">
-function changeTheme() {
-  const colorMode = useColorMode();
-  colorMode.value = colorMode.value === "light" ? "dark" : "light";
-}
-</script>
-
 <template>
   <header>
     <nav>
@@ -17,13 +10,16 @@ function changeTheme() {
         </li>
         <div class="flow-inline center">
           <li>
-            <NuxtLink href="/cursos">Aprenda</NuxtLink>
+            <NuxtLink to="/cursos">Cursos</NuxtLink>
           </li>
           <li>
-            <NuxtLink href="/contribuidores">Contribuidores</NuxtLink>
+            <NuxtLink to="/artigos">Artigos</NuxtLink>
           </li>
           <li>
-            <NuxtLink href="/sobre">Sobre</NuxtLink>
+            <NuxtLink to="/trilhas">Trilhas</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/sobre">Sobre</NuxtLink>
           </li>
         </div>
         <div class="flow-inline right">

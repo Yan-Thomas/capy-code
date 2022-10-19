@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Article" ADD COLUMN     "creationDate" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "description" TEXT NOT NULL DEFAULT '';
