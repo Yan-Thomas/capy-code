@@ -36,7 +36,6 @@ const filteredCourses = computed(() => {
 
 <style scoped>
 a {
-  max-width: 450px;
   text-decoration: none;
 }
 </style>
