@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useHead({
+  title: "Sobre",
+});
+
 const { data: content } = await useAsyncData("about-content", () =>
   queryContent().where({ title: "Sobre o projeto" }).findOne()
 );
