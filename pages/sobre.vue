@@ -20,7 +20,7 @@ const { data: content } = await useAsyncData("about-content", () =>
 
 <style scoped>
 main {
-  padding-top: var(--space-xl);
+  padding-block: var(--space-xl);
   padding-inline: var(--space-s);
 }
 

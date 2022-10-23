@@ -5,7 +5,11 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const roadmaps = await prisma.roadmap.findMany({
     include: {
-      courses: true,
+      courses: {
+        select: {
+          course: true,
+        },
+      },
     },
   });
 

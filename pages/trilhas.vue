@@ -20,12 +20,14 @@ const filteredRoadmaps = computed(() => {
       <h1>Trilhas</h1>
       <search-content v-model="search" placeholder="Pesquisar por trilhas..." />
     </template>
-    <Card
-      v-for="roadmap in filteredRoadmaps"
-      :key="roadmap.id"
-      :name="roadmap.name"
-      :description="roadmap.description"
-      :image-url="roadmap.imageUrl"
-    />
+    <template v-for="roadmap in filteredRoadmaps" :key="roadmap.id">
+      <roadmap-modal :name="roadmap.name" :courses="roadmap.courses">
+        <Card
+          :name="roadmap.name"
+          :description="roadmap.description"
+          :image-url="roadmap.imageUrl"
+        />
+      </roadmap-modal>
+    </template>
   </NuxtLayout>
 </template>

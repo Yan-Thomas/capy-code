@@ -137,6 +137,10 @@ button:hover {
   fill: var(--gray-8);
 }
 
+.refresh:hover {
+  fill: var(--gray-9);
+}
+
 .tabs-container {
   border-bottom: 1px solid var(--gray-4);
   z-index: 10;

@@ -18,7 +18,6 @@ const props = defineProps<{
 
 <style scoped>
 .card {
-  height: 100%;
   border: 1px solid var(--gray-4);
   border-radius: 12px;
 }
