@@ -58,8 +58,8 @@ p {
 .hero img {
   width: 100%;
   height: 100%;
-  max-width: 500px;
-  max-height: 500px;
+  max-width: 60vw;
+  max-height: 80vh;
   margin-left: auto;
   object-fit: contain;
 }
