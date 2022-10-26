@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  modules: ["@nuxt/content", "@nuxtjs/color-mode"],
+  modules: ["@nuxt/content"],
   buildModules: ["@nuxtjs/google-fonts"],
   typescript: {
     shim: false,
