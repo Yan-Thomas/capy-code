@@ -2,6 +2,7 @@
 const props = defineProps<{
   type: "primary" | "secondary";
   arrow?: boolean;
+  fullWidth?: boolean;
 }>();
 </script>
 
@@ -10,6 +11,7 @@ const props = defineProps<{
     :class="{
       primary: props.type === 'primary',
       secondary: props.type === 'secondary',
+      fullWidth: props.fullWidth,
     }"
   >
     <slot />
@@ -39,6 +41,14 @@ button {
   border-radius: 24px;
   padding-block: var(--space-3xs);
   padding-inline: var(--space-s);
+}
+
+button.fullWidth {
+  width: 100%;
+  justify-content: center;
+  padding-block: var(--space-2xs);
+  padding-inline: var(--space-s);
+  font-size: var(--step--1);
 }
 
 button:hover {
