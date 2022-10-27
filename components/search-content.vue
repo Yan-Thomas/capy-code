@@ -24,7 +24,6 @@ input {
   max-width: 300px;
   padding-left: var(--space-s);
   padding-right: calc(var(--space-s) + 20px);
-  background-color: none;
   background: url("/search-icon.svg") no-repeat right;
   background-position-x: calc(100% - 20px);
   background-size: 20px;
