@@ -25,7 +25,7 @@ const filteredRoadmaps = computed(() => {
         <Card
           :name="roadmap.name"
           :description="roadmap.description"
-          :image-url="roadmap.imageUrl"
+          :image-url="`/api/generateImage?type=trilha&description=${roadmap.description}&name=${roadmap.name}`"
         />
       </roadmap-modal>
     </template>

@@ -11,18 +11,15 @@ model User {
   id                    String              @id @default(cuid())
   name                  String              @db.VarChar(200)
   email                 String              @unique @db.VarChar(200)
-  password              String              @db.VarChar(64)
   description           String?             @db.Text
   authToken             String?             @db.VarChar(64)
   authDiscord           String?             @db.VarChar(64)
   authGithub            String?             @db.VarChar(64)
-  isEmailVerified       Boolean?            @default(false)
-  emailConfirmationCode String?             @db.VarChar(8)
-  passwordRecoveryToken String?             @db.VarChar(64)
   socials               Social[]
   articles              ArticleProgress[]
   challenges            ChallengeProgress[]
   roadmaps              RoadmapProgress[]
+  @@unique([email, authToken])
 }
 
 model Social {
@@ -35,7 +32,6 @@ model Course {
   id          String           @id @db.VarChar(200)
   name        String           @db.VarChar(200)
   description String           @db.Text
-  imageUrl    String           @default("") @db.VarChar(500)
   articles    Article[]
   roadmaps    RoadmapCourses[]
 }
@@ -45,7 +41,6 @@ model Article {
   name            String            @db.VarChar(100)
   description     String            @db.Text
   order           Int               @default(autoincrement())
-  imageUrl        String            @default("") @db.VarChar(500)
   creationDate    DateTime          @default(now()) @db.Date
   isHidden        Boolean           @default(false)
   course          Course            @relation(fields: [courseId], references: [id])
@@ -84,7 +79,6 @@ model Roadmap {
   id              String            @id @default(cuid())
   name            String            @db.VarChar(200)
   description     String            @db.Text
-  imageUrl        String            @default("") @db.VarChar(500)
   courses         RoadmapCourses[]
   roadmapProgress RoadmapProgress[]
 }

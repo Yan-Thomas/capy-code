@@ -1,3 +1,13 @@
+<script setup lang="ts">
+const { session, reset } = await useSession();
+const isOpen = ref(false);
+
+async function logOut() {
+  await reset();
+  navigateTo("/");
+}
+</script>
+
 <template>
   <header>
     <nav>
@@ -56,7 +66,49 @@
             </a>
           </li>
           <li>
-            <main-button type="primary">Entrar</main-button>
+            <template v-if="session?.user">
+              <button class="menu-button" @click="isOpen = !isOpen">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  width="24"
+                  height="24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  width="20"
+                  height="20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <div v-if="isOpen" class="menu">
+                <ul class="flow-block">
+                  <li>
+                    <NuxtLink to="/perfil">Seu perfil</NuxtLink>
+                  </li>
+                  <li class="logout">
+                    <button @click="logOut">Sair</button>
+                  </li>
+                </ul>
+              </div>
+            </template>
+            <NuxtLink v-else to="/login">
+              <main-button type="primary">Entrar</main-button>
+            </NuxtLink>
           </li>
         </div>
       </ul>
@@ -108,18 +160,6 @@ svg {
   fill: var(--gray-8);
 }
 
-.theme-selector {
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-  background: none;
-  border: none;
-}
-
-.theme-selector:hover svg {
-  fill: var(--gray-9);
-}
-
 a {
   color: var(--gray-8);
   text-decoration: none;
@@ -127,5 +167,57 @@ a {
 
 a:hover {
   color: var(--gray-9);
+}
+
+.menu-button {
+  all: inherit;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.menu-button:hover svg {
+  fill: var(--gray-9);
+}
+
+.menu {
+  text-align: left;
+  background-color: #ffffff;
+  position: absolute;
+  right: 0;
+  top: 60px;
+  padding-block: var(--space-2xs);
+  border: 1px solid var(--gray-4);
+}
+
+.menu ul {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  --flow-space: var(--space-3xs);
+}
+
+.menu li {
+  width: 100%;
+  padding-inline: var(--space-s);
+}
+
+.menu li:hover {
+  background-color: var(--gray-4);
+}
+
+.menu button {
+  color: var(--gray-8);
+  text-align: left;
+}
+
+.logout button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 </style>

@@ -28,7 +28,7 @@ const filteredCourses = computed(() => {
       <Card
         :name="course.name"
         :description="course.description"
-        :image-url="course.imageUrl"
+        :image-url="`/api/generateImage?type=curso&description=${course.description}&name=${course.name}`"
       />
     </NuxtLink>
   </NuxtLayout>

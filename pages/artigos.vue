@@ -30,7 +30,7 @@ const filteredArticles = computed(() => {
       <Card
         :name="article.name"
         :description="article.description"
-        :image-url="article.imageUrl"
+        :image-url="`/api/generateImage?type=artigo&description=${article.description}&name=${article.name}`"
       />
     </NuxtLink>
   </NuxtLayout>

@@ -2,6 +2,7 @@
 const props = defineProps<{
   modelValue: string;
   label: string;
+  name: string;
   type: string;
 }>();
 
@@ -9,11 +10,14 @@ defineEmits(["update:modelValue"]);
 </script>
 
 <template>
-  <label :for="props.label">{{ props.label }}</label>
+  <div class="heading">
+    <label :for="props.label">{{ props.label }}</label>
+    <slot />
+  </div>
   <input
     :id="props.label"
     :type="props.type"
-    :name="props.label"
+    :name="props.name"
     :value="props.modelValue"
     @input="
       $emit('update:modelValue', ($event.target as HTMLInputElement).value)
@@ -39,5 +43,12 @@ input {
   border: 1px solid var(--gray-4);
   border-radius: 16px;
   background-color: var(--gray-0);
+  margin-bottom: var(--space-s);
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>
