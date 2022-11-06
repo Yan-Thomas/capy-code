@@ -1,6 +1,46 @@
+<script setup>
+const route = useRoute();
+const { session } = await useSession();
+
+const { data: user } = await useFetch(`/api/users/${route.params.user}`);
+
+const { data: courses } = await useFetch("/api/courses/", {
+  method: "get",
+  params: {
+    user: route.params.user,
+  },
+});
+
+if (!user.value) {
+  await navigateTo("/404", { redirectCode: 404 });
+}
+
+const editProfile = ref(false);
+
+const name = ref(user.value.name);
+const description = ref(
+  user.value.description === '""' ? "Sem descrição" : user.value.description
+);
+const socials = ref(user.value.socials);
+const readonlySocials = ref(JSON.parse(JSON.stringify(user.value.socials)));
+
+function addSocial() {
+  socials.value.push({
+    name: "",
+    link: "",
+    id: socials.length + 1,
+  });
+}
+
+function removeSocial(index) {
+  socials.value.splice(index, 1);
+  console.log(socials.value.length);
+}
+</script>
+
 <template>
   <main>
-    <section class="card">
+    <section class="profile">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -13,58 +53,68 @@
           clip-rule="evenodd"
         />
       </svg>
-      <h1>Yan Thomas</h1>
-      <main-button type="secondary" :full-width="true"
-        >Editar perfil</main-button
+      <h1>{{ user.name }}</h1>
+      <main-button
+        v-if="session?.user.id === route.params.user"
+        type="primary"
+        :full-width="true"
+        @click="editProfile = !editProfile"
+        >{{ !editProfile ? "Editar perfil" : "Salvar alterações" }}</main-button
+      >
+      <main-button
+        v-if="session?.user.id === route.params.user && editProfile === true"
+        type="secondary"
+        :full-width="true"
+        @click="editProfile = !editProfile"
+        >Descartar alterações</main-button
       >
       <div class="about">
         <h2>Sobre</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis orci
-          bibendum, tempor lorem sit amet, venenatis odio. Donec elementum
-          turpis ut enim ornare, quis vehicula leo pharetra.
+          {{ user.description === '""' ? "Sem descrição" : user.description }}
         </p>
       </div>
       <div class="links">
         <h2>Links</h2>
         <ul class="flow-block">
-          <li><a href="https://twitter.com">Twitter</a></li>
-          <li><a href="https://twitter.com">Facebook</a></li>
-          <li><a href="https://twitter.com">GitHub</a></li>
-          <li><a href="https://twitter.com">Mastodon</a></li>
+          <template v-for="social in readonlySocials" :key="social.id">
+            <li>
+              <a :href="social.link">{{ social.name }}</a>
+            </li>
+          </template>
         </ul>
       </div>
     </section>
-    <section class="info">
+    <section v-if="!editProfile" class="info">
       <div class="container">
         <h2>Estatísticas</h2>
         <div class="stats flow-inline">
           <div class="stat">
             <p>
-              <span>36</span>
+              <span>{{ user._count.challenges }}</span>
               DESAFIOS<br />
               CONCLUÍDOS
             </p>
           </div>
           <div class="stat">
             <p>
-              <span>37</span>
+              <span>{{ courses.length }}</span>
               CURSOS<br />
-              FINALIZADOS
+              INICIADOS
             </p>
           </div>
           <div class="stat">
             <p>
-              <span>99</span>
+              <span>{{ user._count.articles }}</span>
               ARTIGOS<br />
               LIDOS
             </p>
           </div>
           <div class="stat">
             <p>
-              <span>02</span>
+              <span>{{ user.roadmaps.length }}</span>
               TRILHAS<br />
-              PERCORRIDAS
+              ADICIONADAS
             </p>
           </div>
         </div>
@@ -72,22 +122,104 @@
       <div class="container">
         <h2>Trilhas</h2>
         <div class="card-grid">
-          <Card
-            name="HTML e CSS"
-            description="Aprenda HTML e CSS nesse curso interativo"
-            :image-url="`/api/generateImage?type=curso&description=Aprenda HTML e CSS nesse curso interativo&name=HTML e CSS`"
-          />
+          <template v-for="{ roadmap } in user.roadmaps" :key="roadmap.name">
+            <roadmap-modal :name="roadmap.name" :courses="roadmap.courses">
+              <Card
+                :name="roadmap.name"
+                :description="roadmap.description"
+                :image-url="`/api/generateImage?type=trilha&description=${roadmap.description}&name=${roadmap.name}`"
+              />
+            </roadmap-modal>
+          </template>
         </div>
       </div>
       <div class="container">
         <h2>Cursos</h2>
         <div class="card-grid">
-          <Card
-            name="HTML e CSS"
-            description="Aprenda HTML e CSS nesse curso interativo"
-            :image-url="`/api/generateImage?type=curso&description=Aprenda HTML e CSS nesse curso interativo&name=HTML e CSS`"
-          />
+          <template v-for="course in courses" :key="course.id">
+            <NuxtLink :to="`/curso/${course.id}`">
+              <Card
+                :name="course.name"
+                :description="course.description"
+                :image-url="`/api/generateImage?type=curso&description=${course.description}&name=${course.name}`"
+              />
+            </NuxtLink>
+          </template>
         </div>
+      </div>
+    </section>
+    <section v-else class="info edit">
+      <div class="container">
+        <h2>Editar perfil</h2>
+        <form class="flow-block" @submit.prevent="submitForm">
+          <form-input
+            v-model="name"
+            label="Nome"
+            name="name"
+            type="text"
+          ></form-input>
+          <form-input
+            v-model="description"
+            label="Sobre"
+            name="description"
+            type="text"
+            :textarea="true"
+          ></form-input>
+          <div class="links-container flow-block">
+            <h3>Links</h3>
+            <template v-for="(social, index) in socials" :key="social.id">
+              <div class="links-edit">
+                <button class="remove" @click="removeSocial(index)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
+                    />
+                  </svg>
+                </button>
+                <form-input
+                  v-model="social.name"
+                  :label="social.name"
+                  :not-labeled="true"
+                  type="text"
+                  placeholder="Nome"
+                ></form-input>
+                <form-input
+                  v-model="social.link"
+                  :label="social.name"
+                  :not-labeled="true"
+                  type="text"
+                  placeholder="Link"
+                ></form-input>
+                <button v-if="!socials[index + 1]" @click="addSocial">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    width="20"
+                    height="20"
+                  >
+                    <path
+                      d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </template>
+            <main-button
+              v-if="socials.length < 1"
+              type="primary"
+              @click="addSocial"
+            >
+              Adicionar link
+            </main-button>
+          </div>
+        </form>
       </div>
     </section>
   </main>
@@ -96,16 +228,15 @@
 <style scoped>
 main {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 2fr 5fr;
   width: 100%;
 }
-
-.card {
+.profile {
   padding: var(--space-s);
   border-right: 1px solid var(--gray-4);
 }
 
-.card h1 {
+.profile h1 {
   text-align: center;
   font-size: var(--step-3);
 }
@@ -117,7 +248,7 @@ main {
   margin-inline: auto;
 }
 
-.card button {
+.profile button {
   margin-top: var(--space-s);
 }
 
@@ -190,5 +321,46 @@ main {
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: 1fr;
   gap: var(--space-2xs);
+}
+
+.card-grid a {
+  text-decoration: none;
+}
+
+:deep(textarea),
+:deep(input) {
+  width: 100%;
+  max-width: 400px;
+}
+
+:deep(textarea) {
+  height: 150px;
+}
+
+.links-container div {
+  --flow-space: var(--space-3xs);
+}
+
+.links-edit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.links-edit .remove {
+  margin-right: var(--space-2xs);
+}
+
+.links-edit :deep(input) {
+  max-width: 300px;
+  margin-right: var(--space-2xs);
+}
+
+.links-edit button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: var(--space-s);
 }
 </style>

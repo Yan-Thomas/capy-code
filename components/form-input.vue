@@ -4,6 +4,9 @@ const props = defineProps<{
   label: string;
   name: string;
   type: string;
+  textarea?: boolean;
+  notLabeled?: boolean;
+  placeholder?: string;
 }>();
 
 defineEmits(["update:modelValue"]);
@@ -11,14 +14,27 @@ defineEmits(["update:modelValue"]);
 
 <template>
   <div class="heading">
-    <label :for="props.label">{{ props.label }}</label>
+    <label v-if="!notLabeled" :for="props.label">{{ props.label }}</label>
     <slot />
   </div>
-  <input
+  <textarea
+    v-if="textarea"
     :id="props.label"
     :type="props.type"
     :name="props.name"
     :value="props.modelValue"
+    :placeholder="props.placeholder ? props.placeholder : ''"
+    @input="
+      $emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)
+    "
+  ></textarea>
+  <input
+    v-else
+    :id="props.label"
+    :type="props.type"
+    :name="props.name"
+    :value="props.modelValue"
+    :placeholder="props.placeholder ? props.placeholder : ''"
     @input="
       $emit('update:modelValue', ($event.target as HTMLInputElement).value)
     "
@@ -37,7 +53,8 @@ label {
   --flow-space: var(--space-s);
 }
 
-input {
+input,
+textarea {
   padding-inline: var(--space-s);
   padding-block: var(--space-2xs);
   border: 1px solid var(--gray-4);
@@ -50,5 +67,9 @@ input {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+textarea {
+  resize: none;
 }
 </style>

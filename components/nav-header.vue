@@ -98,7 +98,11 @@ async function logOut() {
               <div v-if="isOpen" class="menu">
                 <ul class="flow-block">
                   <li>
-                    <NuxtLink to="/perfil">Seu perfil</NuxtLink>
+                    <NuxtLink
+                      :to="`/perfil/${session.user.id}`"
+                      @click="isOpen = !isOpen"
+                      >Seu perfil</NuxtLink
+                    >
                   </li>
                   <li class="logout">
                     <button @click="logOut">Sair</button>

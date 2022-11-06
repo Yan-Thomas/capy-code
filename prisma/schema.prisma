@@ -8,22 +8,25 @@ datasource db {
 }
 
 model User {
-  id                    String              @id @default(cuid())
-  name                  String              @db.VarChar(200)
-  email                 String              @unique @db.VarChar(200)
-  description           String?             @db.Text
-  authToken             String?             @db.VarChar(64)
-  authDiscord           String?             @db.VarChar(64)
-  authGithub            String?             @db.VarChar(64)
-  socials               Social[]
-  articles              ArticleProgress[]
-  challenges            ChallengeProgress[]
-  roadmaps              RoadmapProgress[]
+  id          String              @id @default(cuid())
+  name        String              @db.VarChar(200)
+  email       String              @unique @db.VarChar(200)
+  description String              @db.Text @default("")
+  authToken   String?             @db.VarChar(64)
+  authDiscord String?             @db.VarChar(64)
+  authGithub  String?             @db.VarChar(64)
+  socials     Social[]
+  articles    ArticleProgress[]
+  challenges  ChallengeProgress[]
+  roadmaps    RoadmapProgress[]
+
   @@unique([email, authToken])
 }
 
 model Social {
   id     String @id @default(cuid())
+  name   String @db.VarChar(200)
+  link   String @db.VarChar(500)
   user   User   @relation(fields: [userId], references: [id])
   userId String
 }
