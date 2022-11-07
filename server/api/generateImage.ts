@@ -6,7 +6,6 @@ export default defineEventHandler(async (event) => {
   appendResponseHeader(event, "Content-Type", "image/svg+xml");
 
   if (query.type && query.description && query.name) {
-    const size = query.name.length < 12 ? "72px" : "32px";
 
     const output = html`<div
       style="font-family:'Poppins'; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px 16px;"
@@ -15,7 +14,7 @@ export default defineEventHandler(async (event) => {
       ${query.type.toString().toUpperCase()}
       </div>
         <h1
-          style="font-weight: 700; font-size: ${size}; color: #FF922B; margin-bottom: 0px;"
+          style="font-weight: 700; font-size: 32px; color: #FF922B; margin-bottom: 0px;"
         >
           ${query.name}
         </h1>

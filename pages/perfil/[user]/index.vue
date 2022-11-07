@@ -238,7 +238,7 @@ main {
 
 .profile h1 {
   text-align: center;
-  font-size: var(--step-3);
+  font-size: var(--step-2);
 }
 
 .user-icon {
