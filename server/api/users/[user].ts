@@ -30,7 +30,12 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  if (!user) return { message: "User not found", code: "404" };
+  if (!user) {
+    return sendError(
+      event,
+      createError({ statusCode: 404, statusMessage: "User not found" })
+    );
+  }
 
   return user;
 });

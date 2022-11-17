@@ -12,6 +12,7 @@
 <style scoped>
 main {
   padding-inline: var(--space-s);
+  padding-bottom: var(--space-m);
 }
 
 .heading {

@@ -3,7 +3,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
-  const courseId = event.context.params.course;
+  const query = useQuery(event);
+
+  const courseId = query.course?.toString();
 
   const course = await prisma.course.findUnique({
     where: {

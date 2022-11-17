@@ -3,7 +3,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
-  const articleId = event.context.params.article;
+  const query = useQuery(event);
+
+  if (!query.article) return { message: "Article not found", code: "404" };
+
+  const articleId = query.article.toString();
 
   const article = await prisma.article.findUnique({
     where: {

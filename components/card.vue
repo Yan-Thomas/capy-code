@@ -8,7 +8,7 @@ const props = defineProps<{
 
 <template>
   <div class="card">
-    <img :src="props.imageUrl" alt="" />
+    <img :src="props.imageUrl" alt="" loading="lazy" />
     <div class="card-info">
       <h2>{{ props.name }}</h2>
       <p>{{ props.description }}</p>
@@ -20,6 +20,7 @@ const props = defineProps<{
 .card {
   border: 1px solid var(--gray-4);
   border-radius: 12px;
+  height: 100%;
 }
 
 h2 {

@@ -1,9 +1,12 @@
 <script setup lang="ts">
 const route = useRoute();
 
-const { data: courseData } = await useFetch(
-  `/api/courses/${route.params.course}`
-);
+const { data: courseData } = await useFetch(`/api/courses/course`, {
+  params: {
+    course: route.params.course,
+    pick: ["course"],
+  },
+});
 
 const course = courseData.value;
 const articles = course?.articles;

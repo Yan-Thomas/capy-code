@@ -6,15 +6,16 @@ export default defineEventHandler(async (event) => {
   appendResponseHeader(event, "Content-Type", "image/svg+xml");
 
   if (query.type && query.description && query.name) {
+    const size = query.name.length < 12 ? "48px" : "32px";
 
     const output = html`<div
-      style="font-family:'Poppins'; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0px 16px;"
+      style="font-family:'Poppins'; display: flex; flex-direction: column; height: 100%; padding: 32px 16px 8px 16px;"
     >
-      <div style="background-color: #228BE6; padding: 4px 32px; color: white; font-weight: 700; border-radius: 16px; text-align: center;">
+      <p style="background-color: #228BE6; padding: 4px 32px; color: white; font-weight: 700; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; margin: 0; margin-top: 72px;">
       ${query.type.toString().toUpperCase()}
-      </div>
+      </p>
         <h1
-          style="font-weight: 700; font-size: 32px; color: #FF922B; margin-bottom: 0px;"
+          style="font-weight: 700; font-size: ${size}; color: #FF922B; margin-bottom: 0px;"
         >
           ${query.name}
         </h1>

@@ -1,5 +1,23 @@
 <script setup lang="ts">
-import { Article } from ".prisma/client";
+import { Article, ArticleProgress } from ".prisma/client";
+
+interface ArticleWithProgress extends Article, ArticleProgress {
+  id: string;
+  name: string;
+  description: string;
+  order: number;
+  creationDate: Date;
+  isHidden: boolean;
+  courseId: string;
+  articleProgress: [
+    {
+      isFinished: boolean;
+      conclusionDate: Date;
+      userId: string;
+      articleId: string;
+    }
+  ];
+}
 
 const props = defineProps<{
   courseName: string;
@@ -56,13 +74,26 @@ function toggleNav() {
   </div>
   <nav :class="{ open: isOpen }">
     <ul>
-      <li
-        v-for="atc in props.articles"
-        :key="atc.id"
-        :class="{ active: atc.id == currentArticle.id }"
-      >
-        <NuxtLink :to="atc.id">{{ atc.order + ". " + atc.name }}</NuxtLink>
-      </li>
+      <template v-for="{ id, order, name } in props.articles" :key="id">
+        <li :class="{ active: id == currentArticle.id }">
+          <NuxtLink :to="id">{{ order + ". " + name }}</NuxtLink>
+          <button class="finish-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              width="20"
+              height="20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </li>
+      </template>
     </ul>
   </nav>
 </template>
@@ -124,6 +155,10 @@ ul {
 }
 
 li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   padding-block: var(--space-3xs);
   padding-left: var(--space-2xs);
   border-bottom: 0.5px solid var(--gray-4);
@@ -148,5 +183,16 @@ button {
   margin-right: var(--space-2xs);
   padding: 0;
   cursor: pointer;
+}
+
+.finish-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: var(--gray-4);
+  border-radius: 50%;
 }
 </style>

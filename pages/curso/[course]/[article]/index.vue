@@ -3,9 +3,15 @@ import { SandpackBundlerFiles } from "@codesandbox/sandpack-client";
 
 const route = useRoute();
 
-const { data: courseData } = await useFetch(
-  `/api/courses/${route.params.course}`
-);
+const { data: session } = await useFetch(`/api/session`, {
+  method: "get",
+});
+
+const { data: courseData } = await useFetch(`/api/courses/course/`, {
+  params: {
+    course: route.params.course,
+  },
+});
 
 const course = courseData.value;
 const articles = course?.articles;
