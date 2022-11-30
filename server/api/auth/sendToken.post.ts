@@ -5,7 +5,7 @@ import mail from "@sendgrid/mail";
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
-  const query = useQuery(event);
+  const query = getQuery(event);
 
   if (query.email) {
     const user = await prisma.user.findUnique({
@@ -18,7 +18,8 @@ export default defineEventHandler(async (event) => {
 
     const authToken = createHash("sha256")
       .update(user.email + user.id + Date.now().toString())
-      .digest("base64");
+      .digest("base64")
+      .slice(0, 5);
 
     await prisma.user.update({
       where: {

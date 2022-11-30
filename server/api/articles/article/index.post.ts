@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const user = event.context.session.user;
-  const query = useQuery(event);
+  const query = getQuery(event);
 
   if (!user) return { message: "User must be autenticated", code: "401" };
   if (!query.article || !query.state)

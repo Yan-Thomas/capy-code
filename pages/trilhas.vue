@@ -23,6 +23,7 @@ const filteredRoadmaps = computed(() => {
     <template v-for="roadmap in filteredRoadmaps" :key="roadmap.id">
       <roadmap-modal :name="roadmap.name" :courses="roadmap.courses">
         <Card
+          type="trilha"
           :name="roadmap.name"
           :description="roadmap.description"
           :image-url="`/api/generateImage?type=trilha&description=${roadmap.description}&name=${roadmap.name}`"

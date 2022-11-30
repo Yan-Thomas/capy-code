@@ -1,6 +1,5 @@
 export default defineNuxtConfig({
-  modules: ["@nuxt/content", "@sidebase/nuxt-session"],
-  buildModules: ["@nuxtjs/google-fonts"],
+  modules: ["@nuxt/content", "@sidebase/nuxt-session", "@nuxtjs/google-fonts"],
   session: {
     session: {
       expiryInSeconds: 86400,
@@ -20,7 +19,9 @@ export default defineNuxtConfig({
       Ubuntu: true,
     },
   },
-  head: {
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+  app: {
+    head: {
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    },
   },
 });

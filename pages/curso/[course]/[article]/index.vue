@@ -3,10 +3,6 @@ import { SandpackBundlerFiles } from "@codesandbox/sandpack-client";
 
 const route = useRoute();
 
-const { data: session } = await useFetch(`/api/session`, {
-  method: "get",
-});
-
 const { data: courseData } = await useFetch(`/api/courses/course/`, {
   params: {
     course: route.params.course,
@@ -60,6 +56,7 @@ if (sandboxData.value && article) {
   <main>
     <section>
       <article-header
+        :course-id="course!.id"
         :course-name="course!.name"
         :current-article="article!"
         :articles="articles!"
@@ -71,7 +68,11 @@ if (sandboxData.value && article) {
           </template>
         </ContentRenderer>
       </article>
-      <article-nav class="nav" :article-context="context" />
+      <article-nav
+        class="nav"
+        :course-id="course!.id"
+        :article-context="context"
+      />
     </section>
     <div :class="{ inactive: !codeData }" class="sandbox-iframe">
       <interactive-sandbox

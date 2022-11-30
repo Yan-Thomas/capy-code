@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
+  type: "curso" | "artigo" | "trilha";
   name: string;
   description: string;
   imageUrl: string;
@@ -8,7 +9,11 @@ const props = defineProps<{
 
 <template>
   <div class="card">
-    <img :src="props.imageUrl" alt="" loading="lazy" />
+    <img
+      :src="`https://og-gen-mocha.vercel.app/api/og?type=${props.type}&name=${props.name}&description=${props.description}`"
+      alt=""
+      loading="lazy"
+    />
     <div class="card-info">
       <h2>{{ props.name }}</h2>
       <p>{{ props.description }}</p>

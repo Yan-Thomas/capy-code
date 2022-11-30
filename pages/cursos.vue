@@ -26,6 +26,7 @@ const filteredCourses = computed(() => {
       :to="'/curso/' + course.id"
     >
       <Card
+        type="curso"
         :name="course.name"
         :description="course.description"
         :image-url="`/api/generateImage?type=curso&description=${course.description}&name=${course.name}`"

@@ -41,6 +41,7 @@ const open = ref(false);
         <template v-for="{ course } in props.courses" :key="course.id">
           <NuxtLink :to="'/curso/' + course.id">
             <Card
+              type="curso"
               :name="course.name"
               :description="course.description"
               :image-url="`/api/generateImage?type=curso&description=${course.description}&name=${course.name}`"
@@ -92,6 +93,7 @@ svg:hover {
   border-radius: 12px;
   background-color: #ffffff;
   overflow-y: auto;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .heading {

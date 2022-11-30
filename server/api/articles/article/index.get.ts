@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
-  const query = useQuery(event);
+  const query = getQuery(event);
 
   if (!query.article) return { message: "Article not found", code: "404" };
 

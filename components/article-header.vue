@@ -1,34 +1,50 @@
 <script setup lang="ts">
 import { Article, ArticleProgress } from ".prisma/client";
 
-interface ArticleWithProgress extends Article, ArticleProgress {
-  id: string;
-  name: string;
-  description: string;
-  order: number;
-  creationDate: Date;
-  isHidden: boolean;
-  courseId: string;
-  articleProgress: [
-    {
-      isFinished: boolean;
-      conclusionDate: Date;
-      userId: string;
-      articleId: string;
-    }
-  ];
-}
-
 const props = defineProps<{
   courseName: string;
+  courseId: string;
   currentArticle: Article;
   articles: Article[];
 }>();
 
 const isOpen = ref(false);
 
+const { session } = await useSession();
+
 function toggleNav() {
   isOpen.value = !isOpen.value;
+}
+
+const userId = session?.value?.user?.id;
+
+const { data: progress, refresh: refreshProgress } = await useFetch<
+  ArticleProgress[]
+>("/api/progress/get/", {
+  method: "get",
+  params: {
+    course: props.courseId,
+    user: userId,
+  },
+});
+
+function isFinished(id: string) {
+  return (
+    progress.value?.find(
+      ({ articleId, isFinished }) => articleId === id && isFinished
+    ) !== undefined
+  );
+}
+
+async function updateProgress(id: string) {
+  await useFetch("/api/progress/post/", {
+    method: "post",
+    params: {
+      article: id,
+      user: userId,
+    },
+  });
+  refreshProgress();
 }
 </script>
 
@@ -77,8 +93,13 @@ function toggleNav() {
       <template v-for="{ id, order, name } in props.articles" :key="id">
         <li :class="{ active: id == currentArticle.id }">
           <NuxtLink :to="id">{{ order + ". " + name }}</NuxtLink>
-          <button class="finish-button">
+          <button
+            v-if="userId"
+            class="finish-button"
+            @click="updateProgress(id)"
+          >
             <svg
+              v-if="isFinished(id)"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
@@ -194,5 +215,8 @@ button {
   height: 30px;
   background-color: var(--gray-4);
   border-radius: 50%;
+}
+.finish-button:hover {
+  background-color: var(--gray-3);
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Article } from ".prisma/client";
+import { Article, ArticleProgress } from ".prisma/client";
 
 const props = defineProps<{
   articleContext: {
@@ -7,7 +7,44 @@ const props = defineProps<{
     previous: Article | undefined;
     next: Article | undefined;
   };
+  courseId: string;
 }>();
+
+const { session } = await useSession();
+
+const userId = session?.value?.user?.id;
+
+const { data: progress } = await useFetch<ArticleProgress[]>(
+  "/api/progress/get/",
+  {
+    method: "get",
+    params: {
+      course: props.courseId,
+      user: userId,
+    },
+  }
+);
+
+function isFinished(id: string) {
+  return (
+    progress.value?.find(
+      ({ articleId, isFinished }) => articleId === id && isFinished
+    ) !== undefined
+  );
+}
+
+async function finishArticle(id: string) {
+  if (!userId || isFinished(id))
+    return await navigateTo(props.articleContext?.next?.id);
+  await useFetch(`/api/progress/post/`, {
+    method: "post",
+    params: {
+      article: id,
+      user: userId,
+    },
+  });
+  await navigateTo(props.articleContext?.next?.id);
+}
 </script>
 <template>
   <div class="article-buttons">
@@ -36,7 +73,7 @@ const props = defineProps<{
       <div>
         <NuxtLink
           v-if="props.articleContext.next"
-          :to="props.articleContext.next.id"
+          @click="finishArticle(props.articleContext.article!.id)"
           >Próximo
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -75,6 +112,10 @@ a {
   text-decoration: none;
   color: var(--gray-7);
   font-weight: bold;
+}
+
+a:hover {
+  cursor: pointer;
 }
 
 a svg {
