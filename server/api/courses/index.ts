@@ -5,25 +5,8 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
-  if (query.user) {
-    const courses = await prisma.course.findMany({
-      where: {
-        articles: {
-          some: {
-            articleProgress: {
-              some: {
-                isFinished: {
-                  equals: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    return courses;
-  }
+  const userId = query.user?.toString();
+  const subscribedOnly = query.subscribed?.toString() === "true" ? true : false;
 
   const courses = await prisma.course.findMany({
     include: {
@@ -32,6 +15,56 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
+
+  if (userId) {
+    const courses = subscribedOnly
+      ? await prisma.course.findMany({
+          where: {
+            articles: {
+              some: {
+                articleProgress: {
+                  some: {
+                    isFinished: true,
+                    userId: userId,
+                  },
+                },
+              },
+            },
+          },
+          include: {
+            _count: {
+              select: { articles: true },
+            },
+            articles: {
+              select: {
+                articleProgress: {
+                  where: {
+                    userId: userId,
+                  },
+                },
+              },
+            },
+          },
+        })
+      : await prisma.course.findMany({
+          include: {
+            _count: {
+              select: { articles: true },
+            },
+            articles: {
+              select: {
+                articleProgress: {
+                  where: {
+                    userId: userId,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+    return courses;
+  }
 
   if (!courses) {
     return sendError(

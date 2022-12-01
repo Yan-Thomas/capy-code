@@ -10,13 +10,19 @@ const { data: courseData } = await useFetch(`/api/courses/course/`, {
 });
 
 const course = courseData.value;
-const articles = course?.articles;
+const articles = course?.course.articles;
 const article = articles?.find(
   (article) => article.id === route.params.article
 );
 
 useHead({
   title: article?.name,
+  meta: [
+    {
+      property: "og:image",
+      content: `https://og-gen-mocha.vercel.app/api/og?type=curso&name=${course?.course.name}&description=${course?.course.description}`,
+    },
+  ],
 });
 
 if (!course || !article) {
@@ -56,8 +62,8 @@ if (sandboxData.value && article) {
   <main>
     <section>
       <article-header
-        :course-id="course!.id"
-        :course-name="course!.name"
+        :course-id="course!.course.id"
+        :course-name="course!.course.name"
         :current-article="article!"
         :articles="articles!"
       />
@@ -70,7 +76,7 @@ if (sandboxData.value && article) {
       </article>
       <article-nav
         class="nav"
-        :course-id="course!.id"
+        :course-id="course!.course.id"
         :article-context="context"
       />
     </section>

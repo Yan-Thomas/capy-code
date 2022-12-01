@@ -12,12 +12,27 @@ export default defineEventHandler(async (event) => {
     include: {
       socials: true,
       roadmaps: {
+        where: {
+          isSelected: true,
+        },
         include: {
           roadmap: {
             include: {
               courses: {
                 include: {
-                  course: true,
+                  course: {
+                    include: {
+                      articles: {
+                        select: {
+                          articleProgress: {
+                            where: {
+                              userId: userId,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
                 },
               },
             },

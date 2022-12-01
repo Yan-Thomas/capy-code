@@ -1,5 +1,11 @@
 <script setup lang="ts">
-const { data: courses } = await useFetch(`/api/courses`);
+const { session } = await useSession();
+
+const { data: courses } = await useFetch(`/api/courses`, {
+  params: {
+    user: session.value?.user?.id,
+  },
+});
 
 useHead({
   title: "Cursos",
@@ -29,7 +35,7 @@ const filteredCourses = computed(() => {
         type="curso"
         :name="course.name"
         :description="course.description"
-        :image-url="`/api/generateImage?type=curso&description=${course.description}&name=${course.name}`"
+        :progress="course?.articles"
       />
     </NuxtLink>
   </NuxtLayout>

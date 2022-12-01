@@ -1,5 +1,14 @@
 <script setup lang="ts">
-const { data: roadmaps } = await useFetch(`/api/roadmaps`);
+const { session } = await useSession();
+
+const { data: roadmaps, refresh: refreshRoadmaps } = await useFetch(
+  `/api/roadmaps`,
+  {
+    params: {
+      user: session.value?.user?.id,
+    },
+  }
+);
 
 useHead({
   title: "Trilhas",
@@ -21,12 +30,11 @@ const filteredRoadmaps = computed(() => {
       <search-content v-model="search" placeholder="Pesquisar por trilhas..." />
     </template>
     <template v-for="roadmap in filteredRoadmaps" :key="roadmap.id">
-      <roadmap-modal :name="roadmap.name" :courses="roadmap.courses">
+      <roadmap-modal :roadmap="roadmap" :refresh-roadmaps="refreshRoadmaps">
         <Card
           type="trilha"
           :name="roadmap.name"
           :description="roadmap.description"
-          :image-url="`/api/generateImage?type=trilha&description=${roadmap.description}&name=${roadmap.name}`"
         />
       </roadmap-modal>
     </template>

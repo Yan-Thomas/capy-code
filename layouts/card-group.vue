@@ -25,8 +25,26 @@ main {
 
 .view {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-auto-rows: 1fr;
   gap: var(--space-2xs);
+}
+
+@media (min-width: 640px) {
+  .view {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .view {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1536px) {
+  .view {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }
 </style>

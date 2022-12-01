@@ -2,12 +2,25 @@
 const route = useRoute();
 const { session } = await useSession();
 
-const { data: user } = await useFetch(`/api/users/${route.params.user}`);
+const { data: user, refresh: refreshUser } = await useFetch(
+  `/api/users/${route.params.user}`
+);
+
+useHead({
+  title: user.value.name,
+});
+
+const { data: roadmaps } = await useFetch(`/api/roadmaps`, {
+  params: {
+    user: route.params.user,
+  },
+});
 
 const { data: courses } = await useFetch("/api/courses/", {
   method: "get",
   params: {
     user: route.params.user,
+    subscribed: true,
   },
 });
 
@@ -22,19 +35,41 @@ const description = ref(
   user.value.description === '""' ? "Sem descrição" : user.value.description
 );
 const socials = ref(user.value.socials);
-const readonlySocials = ref(JSON.parse(JSON.stringify(user.value.socials)));
+const readonlySocials = ref(socials.value);
 
 function addSocial() {
   socials.value.push({
     name: "",
     link: "",
-    id: socials.length + 1,
+    id: undefined,
+    userId: route.params.user,
   });
 }
 
 function removeSocial(index) {
   socials.value.splice(index, 1);
-  console.log(socials.value.length);
+}
+
+async function saveChanges() {
+  await useFetch("/api/users/update", {
+    method: "post",
+    body: {
+      socials: socials,
+    },
+    params: {
+      user: route.params.user,
+      name: name,
+      description: description,
+    },
+  });
+  await refreshUser();
+  editProfile.value = false;
+}
+
+function getRoadmap(userRoadmap) {
+  return roadmaps.value.filter(
+    (roadmap) => roadmap.name === userRoadmap.roadmap.name
+  )[0];
 }
 </script>
 
@@ -55,17 +90,24 @@ function removeSocial(index) {
       </svg>
       <h1>{{ user.name }}</h1>
       <main-button
-        v-if="session?.user.id === route.params.user"
+        v-if="session?.user.id === route.params.user && !editProfile"
         type="primary"
         :full-width="true"
-        @click="editProfile = !editProfile"
-        >{{ !editProfile ? "Editar perfil" : "Salvar alterações" }}</main-button
+        @click="editProfile = true"
+        >Editar perfil</main-button
       >
       <main-button
-        v-if="session?.user.id === route.params.user && editProfile === true"
+        v-if="session?.user.id === route.params.user && editProfile"
+        type="primary"
+        :full-width="true"
+        @click="saveChanges"
+        >Salvar alterações</main-button
+      >
+      <main-button
+        v-if="session?.user.id === route.params.user && editProfile"
         type="secondary"
         :full-width="true"
-        @click="editProfile = !editProfile"
+        @click="editProfile = false"
         >Descartar alterações</main-button
       >
       <div class="about">
@@ -91,13 +133,6 @@ function removeSocial(index) {
         <div class="stats flow-inline">
           <div class="stat">
             <p>
-              <span>{{ user._count.challenges }}</span>
-              DESAFIOS<br />
-              CONCLUÍDOS
-            </p>
-          </div>
-          <div class="stat">
-            <p>
               <span>{{ courses.length }}</span>
               CURSOS<br />
               INICIADOS
@@ -119,29 +154,37 @@ function removeSocial(index) {
           </div>
         </div>
       </div>
-      <div class="container">
+      <div v-if="user.roadmaps.length > 0" class="container">
         <h2>Trilhas</h2>
         <div class="card-grid">
-          <template v-for="{ roadmap } in user.roadmaps" :key="roadmap.name">
-            <roadmap-modal :name="roadmap.name" :courses="roadmap.courses">
+          <template v-for="roadmap in user.roadmaps" :key="roadmap.name">
+            <roadmap-modal
+              :roadmap="getRoadmap(roadmap)"
+              :refresh-roadmaps="
+                async () => {
+                  await refreshNuxtData();
+                }
+              "
+            >
               <Card
-                :name="roadmap.name"
-                :description="roadmap.description"
-                :image-url="`/api/generateImage?type=trilha&description=${roadmap.description}&name=${roadmap.name}`"
+                type="trilha"
+                :name="getRoadmap(roadmap).name"
+                :description="getRoadmap(roadmap).description"
               />
             </roadmap-modal>
           </template>
         </div>
       </div>
-      <div class="container">
+      <div v-if="courses.length > 0" class="container">
         <h2>Cursos</h2>
         <div class="card-grid">
           <template v-for="course in courses" :key="course.id">
             <NuxtLink :to="`/curso/${course.id}`">
               <Card
+                type="curso"
                 :name="course.name"
                 :description="course.description"
-                :image-url="`/api/generateImage?type=curso&description=${course.description}&name=${course.name}`"
+                :progress="course?.articles"
               />
             </NuxtLink>
           </template>
@@ -186,6 +229,7 @@ function removeSocial(index) {
                   v-model="social.name"
                   :label="social.name"
                   :not-labeled="true"
+                  name="socialName"
                   type="text"
                   placeholder="Nome"
                 ></form-input>
@@ -193,6 +237,7 @@ function removeSocial(index) {
                   v-model="social.link"
                   :label="social.name"
                   :not-labeled="true"
+                  name="link"
                   type="text"
                   placeholder="Link"
                 ></form-input>

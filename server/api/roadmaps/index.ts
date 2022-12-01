@@ -3,6 +3,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
+  const query = getQuery(event);
+  const userId = query.user?.toString();
+
   const roadmaps = await prisma.roadmap.findMany({
     include: {
       courses: {
@@ -12,6 +15,37 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
+
+  if (userId) {
+    const roadmaps = await prisma.roadmap.findMany({
+      include: {
+        roadmapProgress: {
+          where: {
+            userId: userId,
+          },
+        },
+        courses: {
+          select: {
+            course: {
+              include: {
+                articles: {
+                  select: {
+                    articleProgress: {
+                      where: {
+                        userId: userId,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return roadmaps;
+  }
 
   if (!roadmaps) {
     return sendError(

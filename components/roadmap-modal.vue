@@ -1,14 +1,27 @@
 <script setup lang="ts">
-import { Course } from "@prisma/client";
+import { Roadmap } from "@prisma/client";
+import { AsyncDataExecuteOptions } from "nuxt/dist/app/composables/asyncData";
 
 const props = defineProps<{
-  name: string;
-  courses: {
-    course: Course;
-  }[];
+  roadmap: Roadmap;
+  refreshRoadmaps: (opts?: AsyncDataExecuteOptions) => Promise<void>;
 }>();
 
 const open = ref(false);
+
+const { session } = await useSession();
+
+async function updateRoadmapSubscription(state: boolean) {
+  await useFetch("/api/roadmaps/roadmap", {
+    method: "post",
+    params: {
+      roadmap: props.roadmap.id,
+      user: session.value?.user?.id,
+      state: state,
+    },
+  });
+  await props.refreshRoadmaps();
+}
 </script>
 
 <template>
@@ -18,10 +31,21 @@ const open = ref(false);
   <Teleport to="body">
     <div v-if="open === true" class="container">
       <div class="heading">
-        <h3>{{ props.name }}</h3>
+        <h3>{{ props.roadmap.name }}</h3>
         <div class="flow-inline">
-          <main-button type="secondary">Sair da Trilha</main-button>
-          <main-button type="primary" :arrow="true">Continuar</main-button>
+          <main-button
+            v-if="props.roadmap?.roadmapProgress[0]?.isSelected"
+            type="secondary"
+            @click="updateRoadmapSubscription(false)"
+            >Sair da Trilha</main-button
+          >
+          <main-button
+            v-else
+            type="primary"
+            :arrow="true"
+            @click="updateRoadmapSubscription(true)"
+            >Entrar na Trilha</main-button
+          >
           <button class="close-modal" @click="open = false">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -38,13 +62,13 @@ const open = ref(false);
         </div>
       </div>
       <div class="roadmap-courses">
-        <template v-for="{ course } in props.courses" :key="course.id">
+        <template v-for="{ course } in props.roadmap?.courses" :key="course.id">
           <NuxtLink :to="'/curso/' + course.id">
             <Card
               type="curso"
               :name="course.name"
               :description="course.description"
-              :image-url="`/api/generateImage?type=curso&description=${course.description}&name=${course.name}`"
+              :progress="course?.articles"
             />
           </NuxtLink>
         </template>

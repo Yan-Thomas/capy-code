@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
   const courseId = query.course?.toString();
+  const userId = query.user?.toString();
 
   const course = await prisma.course.findUnique({
     where: {
@@ -16,6 +17,15 @@ export default defineEventHandler(async (event) => {
     },
   });
 
+  const progress = await prisma.articleProgress.findMany({
+    where: {
+      userId: userId,
+      article: {
+        courseId: courseId,
+      },
+    },
+  });
+
   if (!course) {
     return sendError(
       event,
@@ -23,5 +33,5 @@ export default defineEventHandler(async (event) => {
     );
   }
 
-  return course;
+  return { course: course, progress: progress };
 });

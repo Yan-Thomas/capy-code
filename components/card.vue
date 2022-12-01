@@ -1,10 +1,27 @@
 <script setup lang="ts">
+interface ArticleWithProgress {
+  articleProgress: [
+    {
+      isFinished: boolean;
+      conclusionDate: string;
+      userId: string;
+      articleId: string;
+    }
+  ];
+}
+
 const props = defineProps<{
   type: "curso" | "artigo" | "trilha";
   name: string;
   description: string;
-  imageUrl: string;
+  progress?: ArticleWithProgress[];
 }>();
+
+// eslint-disable-next-line vue/no-setup-props-destructure
+const maxProgress = props.progress?.length;
+const actualProgress = props.progress?.filter(
+  (article) => article?.articleProgress[0]?.isFinished
+).length;
 </script>
 
 <template>
@@ -14,6 +31,11 @@ const props = defineProps<{
       alt=""
       loading="lazy"
     />
+    <progress
+      v-if="props.progress"
+      :max="maxProgress"
+      :value="actualProgress"
+    ></progress>
     <div class="card-info">
       <h2>{{ props.name }}</h2>
       <p>{{ props.description }}</p>
@@ -43,5 +65,20 @@ h2 {
   border-top: 1px solid var(--gray-4);
   padding-inline: var(--space-2xs);
   padding-block: var(--space-xs);
+}
+
+progress {
+  width: 100%;
+  height: 8px;
+  margin-bottom: -4px;
+  border: none;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: transparent;
+}
+
+progress[value]::-webkit-progress-value {
+  background-color: var(--green-5);
 }
 </style>
